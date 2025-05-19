@@ -1,651 +1,1089 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Local Community Event Portal</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            color: #333;
-            background-color: #f9f9f9;
-        }
+      /* CSS Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 1rem 0;
-            text-align: center;
-        }
+      /* Header styles */
+      header {
+        background: linear-gradient(to right, #3b5998, #4e6fbb);
+        color: white;
+        padding: 1rem 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-bottom: 3px solid red;
+      }
 
-        nav {
-            background-color: #34495e;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+      /* Navigation styles */
+      .nav-link {
+        color: #ffffff;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        margin: 0 15px;
+        display: inline-flex;
+        align-items: center;
+      }
 
+      .nav-link:link {
+        color: #ffffff;
+      }
 
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
+      .nav-link:visited {
+        color: #f0f0f0;
+      }
 
-        nav a:hover {
-            color: #3498db;
-        }
+      .nav-link:hover {
+        color: #ffd700;
+        transform: translateY(-2px);
+      }
 
-        section {
-            padding: 2rem;
-            margin: 1rem 0;
-        }
+      .nav-link:active {
+        color: #ff9900;
+      }
 
-        #welcomeBanner {
-            background-color: #7eb3d6;
-            color: white;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
+      /* List styling */
+      .nav-list {
+        list-style-type: none;
+        list-style-position: inside;
+        padding: 0;
+        display: flex;
+      }
 
-        .highlight {
-            background-color: #f1c40f;
-            padding: 3px 5px;
-            border-radius: 3px;
-        }
+      .nav-list li {
+        padding: 0.5rem 0;
+        margin: 0 0.5rem;
+      }
 
-        .table-container {
-            overflow-x: auto;
-        }
+      /* Typography */
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
+      body {
+        font-family: 'Open Sans', sans-serif;
+        line-height: 1.6;
+        background-color: #f8f9fa;
+        background-image: url('https://images.unsplash.com/photo-1557683316-973673baf926?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=5');
+        background-attachment: fixed;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
 
-        table,
-        th,
-        td {
-            border: 1px solid #ddd;
-        }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
 
-        th,
-        td {
-            padding: 15px;
-            text-align: center;
-        }
+      p {
+        line-height: 1.8;
+        margin-bottom: 1rem;
+      }
 
-        .event-image {
-            width: 200px;
-            height: 150px;
-            object-fit: cover;
-            border: 3px solid #3498db;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
+      /* Event cards */
+      .event-card {
+        background-color: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e0e0e0;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
 
-        .event-image:hover {
-            transform: scale(1.05);
-        }
+      .event-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
 
-        form {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
+      /* Box model showcase */
+      #main-header {
+        padding: 2rem;
+        margin: 1rem 0;
+        border: 2px solid #4e6fbb;
+        outline: 1px dashed #ff9900;
+        outline-offset: 5px;
+      }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+      /* Table styling */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+      }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
+      th, td {
+        padding: 0.75rem;
+        text-align: center;
+        border: 1px solid #dee2e6;
+      }
 
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
+      th {
+        background-color: #3b5998;
+        color: white;
+        font-weight: 600;
+      }
 
-        button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
 
-        button:hover {
-            background-color: #2980b9;
-        }
+      /* Multi-column layout for news */
+      .news-bulletin {
+        column-count: 2;
+        column-gap: 30px;
+        column-rule: 1px solid #dee2e6;
+        padding: 1rem;
+        background-color: white;
+        border-radius: 8px;
+        margin: 2rem 0;
+      }
 
-        .output {
-            margin-top: 15px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            display: none;
-        }
+      /* Form styling */
+      input, select, textarea {
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        padding: 0.5rem;
+        width: 100%;
+        margin-bottom: 1rem;
+        font-family: 'Open Sans', sans-serif;
+      }
 
-        .video-container {
-            margin: 20px 0;
-        }
+      input:focus, select:focus, textarea:focus {
+        outline: 2px solid #4e6fbb;
+        border-color: #4e6fbb;
+      }
 
-        .char-count {
-            color: #7f8c8d;
-            font-size: 14px;
-        }
+      /* Buttons */
+      button {
+        background-color: #3b5998;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-weight: 600;
+      }
 
-        footer {
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 1rem 0;
-            margin-top: 2rem;
-        }
+      button:hover {
+        background-color: #4e6fbb;
+      }
 
-        .enlarged {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            height: auto;
-            max-height: 80vh;
-            z-index: 1000;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      /* Media Queries for Responsiveness */
+      @media (max-width: 768px) {
+        .nav-list {
+          display: flex;
+          flex-direction: column;
         }
+        
+        .news-bulletin {
+          column-count: 1;
+        }
+        
+        h1 {
+          font-size: 1.8rem;
+        }
+        
+        h2 {
+          font-size: 1.5rem;
+        }
+        
+        .event-card {
+          padding: 1rem;
+        }
+        
+        img {
+          max-width: 100%;
+          height: auto;
+        }
+      }
 
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 999;
-            display: none;
-        }
+      /* Flexbox layout */
+      .flex-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+      }
 
-        @media (max-width: 768px) {
-            .event-image {
-                width: 150px;
-                height: 100px;
-            }
-        }
+      .flex-item {
+        flex: 1 1 300px;
+      }
+
+      /* Visibility examples */
+      .hidden {
+        visibility: hidden;
+      }
+
+      .not-displayed {
+        display: none;
+      }
+
+      /* Container styling */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      .py-4 {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+      }
+
+      .py-8 {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+      }
+
+      .py-16 {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+      }
+
+      .px-4 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .mx-auto {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .text-center {
+        text-align: center;
+      }
+
+      .text-white {
+        color: white;
+      }
+
+      .font-bold {
+        font-weight: bold;
+      }
+
+      .text-xl {
+        font-size: 1.25rem;
+      }
+
+      .text-2xl {
+        font-size: 1.5rem;
+      }
+
+      .text-3xl {
+        font-size: 1.875rem;
+      }
+
+      .text-4xl {
+        font-size: 2.25rem;
+      }
+
+      .mb-2 {
+        margin-bottom: 0.5rem;
+      }
+
+      .mb-4 {
+        margin-bottom: 1rem;
+      }
+
+      .mb-6 {
+        margin-bottom: 1.5rem;
+      }
+
+      .mb-8 {
+        margin-bottom: 2rem;
+      }
+
+      .mt-4 {
+        margin-top: 1rem;
+      }
+
+      .mt-8 {
+        margin-top: 2rem;
+      }
+
+      .p-6 {
+        padding: 1.5rem;
+      }
+
+      .rounded-lg {
+        border-radius: 0.5rem;
+      }
+
+      .shadow-md {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+
+      .shadow-lg {
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+
+      /* Welcome card styling */
+      .welcome-card {
+        max-width: 900px;
+        margin: 0 auto;
+        border: none;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(to bottom right, #f0f4ff, #e1eaff);
+      }
+
+      .card-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-align: center;
+        color: #3b5998;
+      }
+
+      .card-description {
+        font-size: 1.25rem;
+        text-align: center;
+        color: #4e6fbb;
+      }
+
+      .card-content {
+        padding: 1.5rem;
+      }
+
+      .welcome-banner {
+        background-color: #3b5998;
+        color: white;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .special-offer {
+        background-color: #ff4d4d;
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-weight: bold;
+      }
+
+      /* Form styles */
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+
+      .output {
+        margin-top: 15px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        display: none;
+      }
+
+      /* Icon styling for nav links */
+      .icon {
+        margin-right: 0.5rem;
+        width: 1rem;
+        height: 1rem;
+      }
+
+      /* Overlay for enlarged images */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.7);
+        z-index: 999;
+        display: none;
+      }
+
+      .enlarged {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        height: auto;
+        max-height: 80vh;
+        z-index: 1000;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      }
+
+      .event-image {
+        width: 200px;
+        height: 150px;
+        object-fit: cover;
+        border: 3px solid #3b5998;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: transform 0.3s;
+      }
+
+      .event-image:hover {
+        transform: scale(1.05);
+      }
+
+      footer {
+        background-color: #2c3e50;
+        color: white;
+        text-align: center;
+        padding: 1rem 0;
+        margin-top: 2rem;
+      }
     </style>
-</head>
-
-<body>
+  </head>
+  <body>
     <!-- Header Section -->
     <header>
-        <h1>Local Community Event Portal</h1>
-        <p>Connect, Participate, Celebrate</p>
+      <div class="container mx-auto px-4 py-4">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-white font-bold text-xl" id="main-header">
+            Local Community Event Portal
+          </div>
+          
+          <nav>
+            <ul class="nav-list">
+              <li>
+                <a class="nav-link" href="#home">
+                  <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                  </svg>
+                  Home
+                </a>
+              </li>
+              <li>
+                <a class="nav-link" href="#events">
+                  <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  Events
+                </a>
+              </li>
+              <li>
+                <a class="nav-link" href="#register">
+                  <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  Register
+                </a>
+              </li>
+              <li>
+                <a class="nav-link" href="#feedback">
+                  <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                  Feedback
+                </a>
+              </li>
+              <li>
+                <a class="nav-link" href="#contact">
+                  <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                  </svg>
+                  Contact
+                </a>
+              </li>
+              <li>
+                <a class="nav-link" href="help.html" target="_blank">
+                  <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                  Help
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
     </header>
-
-    <!-- Navigation Section -->
-    <nav>
-        <a href="#home">Home</a>
-        <a href="#events">Events</a>
-        <a href="#register">Register</a>
-        <a href="#feedback">Feedback</a>
-        <a href="#media">Media</a>
-        <a href="#contact">Contact</a>
-        <a href="help.html" target="_blank">Help</a>
-    </nav>
 
     <!-- Main Content -->
     <main>
-        <!-- Home Section -->
-        <section id="home">
-            <div id="welcomeBanner">
-                <h2>Welcome to our Community Portal!</h2>
-                <p>Find and register for exciting local events in your community.</p>
-                <p>Don't miss our <span style="color: red; font-weight: bold;">special offer this week!</span> Free
-                    entry for family events.</p>
+      <!-- Welcome Section -->
+      <section id="home" class="py-16 container mx-auto px-4">
+        <div class="welcome-card event-card">
+          <div class="card-title">Welcome to our Community Portal!</div>
+          <div class="card-description">Connect, Participate, Celebrate</div>
+          <div class="card-content">
+            <div class="welcome-banner">
+              <h2 class="text-2xl font-bold mb-2">Find and register for exciting local events</h2>
+              <p class="mb-4">Our platform connects residents with local events, services, and resources.</p>
+              <p>Don't miss our <span class="special-offer">special offer this week!</span> Free entry for family events.</p>
             </div>
-
-            <p>Our platform connects residents with <span class="highlight">local events</span>, services, and
-                resources. Browse through our catalog of upcoming activities and register for the ones that interest
-                you.</p>
-
-            <div id="location-info">
-                <button id="findNearbyEvents">Find Nearby Events</button>
-                <p id="geo-status"></p>
-                <p id="geo-coordinates"></p>
+            
+            <div class="mt-8 text-center">
+              <button id="findNearbyEvents">Find Nearby Events</button>
+              <p class="mt-4" style="color: #666;">Browse through our catalog of upcoming activities and register for the ones that interest you.</p>
+              <div id="geo-status"></div>
+              <div id="geo-coordinates"></div>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Event Listings -->
+      <section id="events" class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-center mb-8">Upcoming Events</h2>
+        
+        <table>
+          <caption>Community Events Schedule</caption>
+          <thead>
+            <tr>
+              <th>Event Name</th>
+              <th>Date</th>
+              <th>Location</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Summer Festival</td>
+              <td>July 15, 2025</td>
+              <td>Community Park</td>
+              <td>$10</td>
+            </tr>
+            <tr>
+              <td>Art Exhibition</td>
+              <td>August 5, 2025</td>
+              <td>City Gallery</td>
+              <td>Free</td>
+            </tr>
+            <tr>
+              <td>Food Festival</td>
+              <td>September 20, 2025</td>
+              <td>Downtown Plaza</td>
+              <td>$15</td>
+            </tr>
+            <tr>
+              <td>Sports Tournament</td>
+              <td>October 10, 2025</td>
+              <td>Sports Complex</td>
+              <td>$5</td>
+            </tr>
+          </tbody>
+        </table>
 
-        <!-- Events Section -->
-        <section id="events">
-            <h2>Upcoming <span class="highlight">Community Events</span></h2>
-            <p>Check out images from our past events:</p>
+        <h3 class="text-2xl font-bold mt-8 mb-4">Past Event Images</h3>
+        <p>Check out images from our past events (double-click to enlarge):</p>
+        
+        <div class="table-container">
+          <table>
+            <caption>Highlights from Recent Community Gatherings</caption>
+            <tr>
+              <td>
+                <img src="https://images.unsplash.com/photo-1511578314322-379afb476865" 
+                     alt="Summer Festival" 
+                     title="Annual Summer Festival" 
+                     class="event-image" 
+                     ondblclick="enlargeImage(this)">
+                <p>Summer Festival</p>
+              </td>
+              <td>
+                <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94" 
+                     alt="Community Cleanup" 
+                     title="Spring Community Cleanup" 
+                     class="event-image" 
+                     ondblclick="enlargeImage(this)">
+                <p>Community Cleanup</p>
+              </td>
+              <td>
+                <img src="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a" 
+                     alt="Night Market" 
+                     title="Local Night Market" 
+                     class="event-image" 
+                     ondblclick="enlargeImage(this)">
+                <p>Night Market</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205" 
+                     alt="Sports Tournament" 
+                     title="Annual Sports Tournament" 
+                     class="event-image" 
+                     ondblclick="enlargeImage(this)">
+                <p>Sports Tournament</p>
+              </td>
+              <td>
+                <img src="https://images.unsplash.com/photo-1472653525502-fc569e405a74" 
+                     alt="Art Exhibition" 
+                     title="Local Artists Exhibition" 
+                     class="event-image" 
+                     ondblclick="enlargeImage(this)">
+                <p>Art Exhibition</p>
+              </td>
+              <td>
+                <img src="https://images.unsplash.com/photo-1464207687429-7505649dae38" 
+                     alt="Food Festival" 
+                     title="Annual Food Festival" 
+                     class="event-image" 
+                     ondblclick="enlargeImage(this)">
+                <p>Food Festival</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+        
+        <div id="overlay" class="overlay" onclick="closeEnlargedImage()"></div>
+      </section>
+      
+      <!-- News Bulletin -->
+      <section class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-center mb-8">Community News</h2>
+        
+        <div class="news-bulletin">
+          <h3>Park Renovation Complete</h3>
+          <p>The central community park renovation has been completed ahead of schedule. New facilities include improved playground equipment, accessible pathways, and enhanced landscaping.</p>
+          
+          <h3>Volunteer Recognition</h3>
+          <p>Last month's community cleanup event saw record participation with over 200 volunteers. Special recognition goes to the youth council for organizing the event.</p>
+          
+          <h3>New Public Library Hours</h3>
+          <p>Starting next month, the public library will extend its hours to include Sunday afternoons from 1-5pm, allowing more residents to utilize its resources.</p>
+          
+          <h3>Transportation Updates</h3>
+          <p>The city has approved funding for additional bus routes connecting the suburban areas to downtown, with service beginning in September 2025.</p>
+        </div>
+      </section>
+      
+      <!-- Flexbox Layout Example -->
+      <section class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-center mb-8">Featured Programs</h2>
+        
+        <div class="flex-container">
+          <div class="flex-item event-card">
+            <h3>Youth Development</h3>
+            <p>Programs designed to help young residents develop leadership and career skills.</p>
+          </div>
+          <div class="flex-item event-card">
+            <h3>Senior Activities</h3>
+            <p>Weekly events and workshops tailored for our senior community members.</p>
+          </div>
+          <div class="flex-item event-card">
+            <h3>Environmental Initiatives</h3>
+            <p>Join our efforts to make our community greener and more sustainable.</p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Registration Form -->
+      <section id="register" class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-center mb-8">Register for Events</h2>
+        
+        <form id="registrationForm" class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md" onsubmit="return showConfirmation(event)">
+          <div class="form-group">
+            <label for="name" class="form-label">Full Name</label>
+            <input 
+              type="text" 
+              id="name" 
+              name="name"
+              placeholder="Enter your full name" 
+              required 
+              autofocus
+              onfocus="highlightField('name')"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email"
+              placeholder="Enter your email address" 
+              required
+              onfocus="highlightField('email')"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input 
+              type="tel" 
+              id="phone" 
+              name="phone"
+              placeholder="Enter your phone number (e.g., 123-456-7890)" 
+              onblur="validatePhone()"
+              onfocus="highlightField('phone')"
+            />
+            <p id="phone-validation" style="color: red; display: none;">Please enter a valid phone number (XXX-XXX-XXXX).</p>
+          </div>
+          
+          <div class="form-group">
+            <label for="date" class="form-label">Preferred Date</label>
+            <input 
+              type="date" 
+              id="date" 
+              name="date"
+              required
+              onfocus="highlightField('date')"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="eventType" class="form-label">Event Type</label>
+            <select 
+              id="eventType" 
+              name="eventType" 
+              required
+              onchange="updateEventFee()"
+              onfocus="highlightField('eventType')"
+            >
+              <option value="">Select an event type</option>
+              <option value="festival">Festival</option>
+              <option value="workshop">Workshop</option>
+              <option value="sports">Sports Event</option>
+              <option value="art">Art Exhibition</option>
+              <option value="food">Food Fair</option>
+            </select>
+            <p id="eventFee"></p>
+          </div>
+          
+          <div class="form-group">
+            <label for="message" class="form-label">Special Requests</label>
+            <textarea 
+              id="message" 
+              name="message" 
+              rows="4" 
+              placeholder="Any special accommodations or requests"
+              onkeyup="countCharacters()"
+              onfocus="highlightField('message')"
+            ></textarea>
+            <p class="char-count"><span id="charCount">0</span> characters</p>
+          </div>
+          
+          <button type="submit">Submit Registration</button>
+          <button type="button" id="clearPreferences">Clear Preferences</button>
+          
+          <output id="confirmationMessage" class="output">Thank you for registering! We'll contact you shortly.</output>
+        </form>
+      </section>
+      
+      <!-- Feedback Section -->
+      <section id="feedback" class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-center mb-8">Event Feedback</h2>
+        <p>We value your opinion! Please share your thoughts about our past events:</p>
+        
+        <form id="feedbackForm" class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
+          <div class="form-group">
+            <label for="eventAttended" class="form-label">Event Attended:</label>
+            <select id="eventAttended" name="eventAttended" required>
+              <option value="">Select an event</option>
+              <option value="summer">Summer Festival</option>
+              <option value="cleanup">Community Cleanup</option>
+              <option value="market">Night Market</option>
+              <option value="sports">Sports Tournament</option>
+              <option value="art">Art Exhibition</option>
+              <option value="food">Food Festival</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="rating" class="form-label">Rating (1-5):</label>
+            <input type="number" id="rating" name="rating" min="1" max="5" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="feedbackText" class="form-label">Your Feedback:</label>
+            <textarea id="feedbackText" name="feedbackText" rows="4" placeholder="Share your thoughts about the event" onkeyup="countFeedbackCharacters()"></textarea>
+            <p class="char-count"><span id="feedbackCharCount">0</span> characters</p>
+          </div>
+          
+          <button type="button" onclick="submitFeedback()">Submit Feedback</button>
+          <output id="feedbackConfirmation" class="output">Thank you for your feedback!</output>
+        </form>
+      </section>
+      
+      <!-- Media Section -->
+      <section id="media" class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-center mb-8">Event Promo Video</h2>
+        <p>Watch our short promotional video:</p>
+        
+        <div class="video-container max-w-2xl mx-auto">
+          <video id="promoVideo" width="100%" controls>
+            <source src="https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4" type="video/mp4">
+            Your browser does not support the video element.
+          </video>
+          <p id="videoStatus"></p>
+        </div>
+      </section>
+      
+      <!-- Contact Section -->
+      <section id="contact" class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-center mb-8">Contact Us</h2>
+        <p>Have questions? Get in touch with the community event organizers:</p>
+        
+        <form id="contactForm" class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
+          <div class="form-group">
+            <label for="contactName" class="form-label">Name:</label>
+            <input type="text" id="contactName" name="contactName" placeholder="Enter your name" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="contactEmail" class="form-label">Email:</label>
+            <input type="email" id="contactEmail" name="contactEmail" placeholder="Enter your email" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="subject" class="form-label">Subject:</label>
+            <input type="text" id="subject" name="subject" placeholder="Enter message subject" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="contactMessage" class="form-label">Message:</label>
+            <textarea id="contactMessage" name="contactMessage" rows="4" placeholder="Enter your message" required></textarea>
+          </div>
+          
+          <button type="submit">Send Message</button>
+        </form>
+      </section>
 
-            <div class="table-container">
-                <table>
-                    <caption>Highlights from Recent Community Gatherings</caption>
-                    <tr>
-                        <td>
-                            <img src="https://images.unsplash.com/photo-1511578314322-379afb476865"
-                                alt="Summer Festival" title="Annual Summer Festival" class="event-image"
-                                ondblclick="enlargeImage(this)">
-                            <p>Summer Festival</p>
-                        </td>
-                        <td>
-                            <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94"
-                                alt="Community Cleanup" title="Spring Community Cleanup" class="event-image"
-                                ondblclick="enlargeImage(this)">
-                            <p>Community Cleanup</p>
-                        </td>
-                        <td>
-                            <img src="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a" alt="Night Market"
-                                title="Local Night Market" class="event-image" ondblclick="enlargeImage(this)">
-                            <p>Night Market</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205"
-                                alt="Sports Tournament" title="Annual Sports Tournament" class="event-image"
-                                ondblclick="enlargeImage(this)">
-                            <p>Sports Tournament</p>
-                        </td>
-                        <td>
-                            <img src="https://images.unsplash.com/photo-1472653525502-fc569e405a74" alt="Art Exhibition"
-                                title="Local Artists Exhibition" class="event-image" ondblclick="enlargeImage(this)">
-                            <p>Art Exhibition</p>
-                        </td>
-                        <td>
-                            <img src="https://images.unsplash.com/photo-1464207687429-7505649dae38" alt="Food Festival"
-                                title="Annual Food Festival" class="event-image" ondblclick="enlargeImage(this)">
-                            <p>Food Festival</p>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-            <div id="overlay" class="overlay" onclick="closeEnlargedImage()"></div>
-        </section>
-
-        <!-- Registration Section -->
-        <section id="register">
-            <h2>Event Registration</h2>
-            <p>Fill out the form below to register for upcoming events:</p>
-
-            <form id="registrationForm" onsubmit="return showConfirmation(event)">
-                <div class="form-group">
-                    <label for="name">Full Name:</label>
-                    <input type="text" id="name" name="name" placeholder="Enter your full name" required autofocus>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="phone">Phone Number:</label>
-                    <input type="tel" id="phone" name="phone" placeholder="Enter your phone number (e.g., 123-456-7890)"
-                        onblur="validatePhone()">
-                    <p id="phone-validation" style="color: red; display: none;">Please enter a valid phone number
-                        (XXX-XXX-XXXX).</p>
-                </div>
-
-                <div class="form-group">
-                    <label for="date">Preferred Date:</label>
-                    <input type="date" id="date" name="date" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="eventType">Event Type:</label>
-                    <select id="eventType" name="eventType" onchange="updateEventFee()" required>
-                        <option value="">Select an event type</option>
-                        <option value="festival">Festival</option>
-                        <option value="workshop">Workshop</option>
-                        <option value="sports">Sports Event</option>
-                        <option value="art">Art Exhibition</option>
-                        <option value="food">Food Fair</option>
-                    </select>
-                    <p id="eventFee"></p>
-                </div>
-
-                <div class="form-group">
-                    <label for="message">Special Requests:</label>
-                    <textarea id="message" name="message" rows="4" placeholder="Enter any special requests or comments"
-                        onkeyup="countCharacters()"></textarea>
-                    <p class="char-count"><span id="charCount">0</span> characters</p>
-                </div>
-
-                <button type="submit">Register Now</button>
-                <button type="button" id="clearPreferences">Clear Preferences</button>
-
-                <output id="confirmationMessage" class="output">Thank you for registering! We'll contact you
-                    shortly.</output>
-            </form>
-        </section>
-
-        <!-- Feedback Section -->
-        <section id="feedback">
-            <h2>Event Feedback</h2>
-            <p>We value your opinion! Please share your thoughts about our past events:</p>
-
-            <form id="feedbackForm">
-                <div class="form-group">
-                    <label for="eventAttended">Event Attended:</label>
-                    <select id="eventAttended" name="eventAttended" required>
-                        <option value="">Select an event</option>
-                        <option value="summer">Summer Festival</option>
-                        <option value="cleanup">Community Cleanup</option>
-                        <option value="market">Night Market</option>
-                        <option value="sports">Sports Tournament</option>
-                        <option value="art">Art Exhibition</option>
-                        <option value="food">Food Festival</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="rating">Rating (1-5):</label>
-                    <input type="number" id="rating" name="rating" min="1" max="5" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="feedbackText">Your Feedback:</label>
-                    <textarea id="feedbackText" name="feedbackText" rows="4"
-                        placeholder="Share your thoughts about the event"
-                        onkeyup="countFeedbackCharacters()"></textarea>
-                    <p class="char-count"><span id="feedbackCharCount">0</span> characters</p>
-                </div>
-
-                <button type="submit" onclick="submitFeedback()">Submit Feedback</button>
-                <output id="feedbackConfirmation" class="output">Thank you for your feedback!</output>
-            </form>
-        </section>
-
-        <!-- Media Section -->
-        <section id="media">
-            <h2>Event Promo Video</h2>
-            <p>Watch our short promotional video:</p>
-
-            <div class="video-container">
-                <video id="promoVideo" width="100%" controls>
-                    <source src="https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4"
-                        type="video/mp4">
-                    Your browser does not support the video element.
-                </video>
-                <p id="videoStatus"></p>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact">
-            <h2>Contact Us</h2>
-            <p>Have questions? Get in touch with the community event organizers:</p>
-
-            <form id="contactForm">
-                <div class="form-group">
-                    <label for="contactName">Name:</label>
-                    <input type="text" id="contactName" name="contactName" placeholder="Enter your name" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="contactEmail">Email:</label>
-                    <input type="email" id="contactEmail" name="contactEmail" placeholder="Enter your email" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="subject">Subject:</label>
-                    <input type="text" id="subject" name="subject" placeholder="Enter message subject" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="contactMessage">Message:</label>
-                    <textarea id="contactMessage" name="contactMessage" rows="4" placeholder="Enter your message"
-                        required></textarea>
-                </div>
-
-                <button type="submit">Send Message</button>
-            </form>
-        </section>
-    </main>
 
     <!-- Footer Section -->
     <footer>
-        <p>&copy; 2025 Local Community Event Portal. All rights reserved.</p>
-        <p>Contact: <a href="mailto:info@communityevents.example" style="color: white;">info@communityevents.example</a>
-        </p>
+      <p>&copy; 2025 Local Community Event Portal. All rights reserved.</p>
+      <p>Contact: <a href="mailto:info@communityevents.example" style="color: white;">info@communityevents.example</a></p>
     </footer>
 
     <script>
-        // Event Type Fee Display
-        function updateEventFee() {
-            const eventType = document.getElementById('eventType');
-            const eventFee = document.getElementById('eventFee');
-            const fees = {
-                festival: '$10',
-                workshop: '$25',
-                sports: '$5',
-                art: 'Free',
-                food: '$15'
-            };
-
-            if (eventType.value) {
-                eventFee.textContent = `Event Fee: ${fees[eventType.value]}`;
-
-                // Save to localStorage
-                localStorage.setItem('preferredEventType', eventType.value);
-            } else {
-                eventFee.textContent = '';
-            }
-        }
-
-        // Character Counter for Message
-        function countCharacters() {
-            const message = document.getElementById('message');
-            const charCount = document.getElementById('charCount');
-            charCount.textContent = message.value.length;
-        }
-
-        // Character Counter for Feedback
-        function countFeedbackCharacters() {
-            const feedbackText = document.getElementById('feedbackText');
-            const feedbackCharCount = document.getElementById('feedbackCharCount');
-            feedbackCharCount.textContent = feedbackText.value.length;
-        }
-
-        // Phone Validation
-        function validatePhone() {
-            const phoneInput = document.getElementById('phone');
-            const phoneValidation = document.getElementById('phone-validation');
-            const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
-
-            if (phoneInput.value && !phoneRegex.test(phoneInput.value)) {
-                phoneValidation.style.display = 'block';
-            } else {
-                phoneValidation.style.display = 'none';
-            }
-        }
-
-        // Registration Confirmation
-        function showConfirmation(event) {
-            event.preventDefault();
-            const confirmationMessage = document.getElementById('confirmationMessage');
-            const name = document.getElementById('name').value;
-
-            confirmationMessage.textContent = `Thank you, ${name}! Your registration has been received. We'll contact you soon.`;
-            confirmationMessage.style.display = 'block';
-
-            // Clear form after 5 seconds
-            setTimeout(() => {
-                document.getElementById('registrationForm').reset();
-                confirmationMessage.style.display = 'none';
-            }, 5000);
-
-            return false;
-        }
-
-        // Submit Feedback
-        function submitFeedback() {
-            const feedbackConfirmation = document.getElementById('feedbackConfirmation');
-            feedbackConfirmation.style.display = 'block';
-
-            // Clear form and hide message after 3 seconds
-            setTimeout(() => {
-                document.getElementById('feedbackForm').reset();
-                feedbackConfirmation.style.display = 'none';
-            }, 3000);
-        }
-
-        // Enlarge Image on Double Click
-        function enlargeImage(img) {
-            const overlay = document.getElementById('overlay');
-            overlay.style.display = 'block';
-
-            // Clone the image
-            const enlargedImg = img.cloneNode();
-            enlargedImg.classList.add('enlarged');
-            document.body.appendChild(enlargedImg);
-        }
-
-        // Close Enlarged Image
-        function closeEnlargedImage() {
-            const overlay = document.getElementById('overlay');
-            overlay.style.display = 'none';
-
-            const enlargedImg = document.querySelector('.enlarged');
-            if (enlargedImg) {
-                document.body.removeChild(enlargedImg);
-            }
-        }
-
-        // Load Preferences from localStorage
-        window.addEventListener('load', function () {
-            const savedEventType = localStorage.getItem('preferredEventType');
-            if (savedEventType) {
-                const eventTypeSelect = document.getElementById('eventType');
-                eventTypeSelect.value = savedEventType;
-                updateEventFee();
-            }
-
-            // Video events
-            const video = document.getElementById('promoVideo');
-            const videoStatus = document.getElementById('videoStatus');
-
-            video.addEventListener('canplay', function () {
-                videoStatus.textContent = 'Video ready to play!';
-                videoStatus.style.color = 'green';
-            });
+      // Highlight field on focus
+      function highlightField(fieldId) {
+        // Reset all fields
+        const formFields = document.querySelectorAll('input, select, textarea');
+        formFields.forEach(field => {
+          field.style.outline = 'none';
         });
-
-        // Clear Preferences Button
-        document.getElementById('clearPreferences').addEventListener('click', function () {
-            localStorage.clear();
-            sessionStorage.clear();
-            document.getElementById('eventType').value = '';
-            document.getElementById('eventFee').textContent = '';
-            alert('All preferences have been cleared.');
+        
+        // Highlight the focused field
+        const field = document.getElementById(fieldId);
+        if (field) {
+          field.style.outline = '2px dashed #4e6fbb';
+        }
+      }
+      
+      // Event Type Fee Display
+      function updateEventFee() {
+        const eventType = document.getElementById('eventType');
+        const eventFee = document.getElementById('eventFee');
+        const fees = {
+          festival: '$10',
+          workshop: '$25',
+          sports: '$5',
+          art: 'Free',
+          food: '$15'
+        };
+        
+        if (eventType.value) {
+          eventFee.textContent = `Event Fee: ${fees[eventType.value]}`;
+          
+          // Save to localStorage
+          localStorage.setItem('preferredEventType', eventType.value);
+        } else {
+          eventFee.textContent = '';
+        }
+      }
+      
+      // Character Counter for Message
+      function countCharacters() {
+        const message = document.getElementById('message');
+        const charCount = document.getElementById('charCount');
+        charCount.textContent = message.value.length;
+      }
+      
+      // Character Counter for Feedback
+      function countFeedbackCharacters() {
+        const feedbackText = document.getElementById('feedbackText');
+        const feedbackCharCount = document.getElementById('feedbackCharCount');
+        feedbackCharCount.textContent = feedbackText.value.length;
+      }
+      
+      // Phone Validation
+      function validatePhone() {
+        const phoneInput = document.getElementById('phone');
+        const phoneValidation = document.getElementById('phone-validation');
+        const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
+        
+        if (phoneInput.value && !phoneRegex.test(phoneInput.value)) {
+          phoneValidation.style.display = 'block';
+        } else {
+          phoneValidation.style.display = 'none';
+        }
+      }
+      
+      // Registration Confirmation
+      function showConfirmation(event) {
+        event.preventDefault();
+        const confirmationMessage = document.getElementById('confirmationMessage');
+        const name = document.getElementById('name').value;
+        
+        confirmationMessage.textContent = `Thank you, ${name}! Your registration has been received. We'll contact you soon.`;
+        confirmationMessage.style.display = 'block';
+        
+        // Clear form after 5 seconds
+        setTimeout(() => {
+          document.getElementById('registrationForm').reset();
+          confirmationMessage.style.display = 'none';
+        }, 5000);
+        
+        return false;
+      }
+      
+      // Submit Feedback
+      function submitFeedback() {
+        const feedbackConfirmation = document.getElementById('feedbackConfirmation');
+        feedbackConfirmation.style.display = 'block';
+        
+        // Clear form and hide message after 3 seconds
+        setTimeout(() => {
+          document.getElementById('feedbackForm').reset();
+          document.getElementById('feedbackCharCount').textContent = '0';
+          feedbackConfirmation.style.display = 'none';
+        }, 3000);
+      }
+      
+      // Enlarge Image on Double Click
+      function enlargeImage(img) {
+        const overlay = document.getElementById('overlay');
+        overlay.style.display = 'block';
+        
+        // Clone the image
+        const enlargedImg = img.cloneNode();
+        enlargedImg.classList.add('enlarged');
+        document.body.appendChild(enlargedImg);
+      }
+      
+      // Close Enlarged Image
+      function closeEnlargedImage() {
+        const overlay = document.getElementById('overlay');
+        overlay.style.display = 'none';
+        
+        const enlargedImg = document.querySelector('.enlarged');
+        if (enlargedImg) {
+          document.body.removeChild(enlargedImg);
+        }
+      }
+      
+      // Load Preferences from localStorage
+      window.addEventListener('load', function() {
+        const savedEventType = localStorage.getItem('preferredEventType');
+        if (savedEventType) {
+          const eventTypeSelect = document.getElementById('eventType');
+          eventTypeSelect.value = savedEventType;
+          updateEventFee();
+        }
+        
+        // Video events
+        const video = document.getElementById('promoVideo');
+        const videoStatus = document.getElementById('videoStatus');
+        
+        video.addEventListener('canplay', function() {
+          videoStatus.textContent = 'Video ready to play!';
+          videoStatus.style.color = 'green';
         });
-
-        // Geolocation
-        document.getElementById('findNearbyEvents').addEventListener('click', function () {
-            const geoStatus = document.getElementById('geo-status');
-            const geoCoordinates = document.getElementById('geo-coordinates');
-
-            geoStatus.textContent = 'Locating you...';
-
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    // Success callback
-                    function (position) {
-                        const latitude = position.coords.latitude;
-                        const longitude = position.coords.longitude;
-
-                        geoStatus.textContent = 'Location found!';
-                        geoCoordinates.innerHTML = `Your coordinates: <br>Latitude: ${latitude.toFixed(6)}<br>Longitude: ${longitude.toFixed(6)}<br><br>Searching for events near you...`;
-
-                        // Simulate finding nearby events
-                        setTimeout(() => {
-                            geoCoordinates.innerHTML += '<br><br>Found 3 events within 5 miles of your location.';
-                        }, 2000);
-                    },
-                    // Error callback
-                    function (error) {
-                        switch (error.code) {
-                            case error.PERMISSION_DENIED:
-                                geoStatus.textContent = 'Location access was denied by the user.';
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                geoStatus.textContent = 'Location information is unavailable.';
-                                break;
-                            case error.TIMEOUT:
-                                geoStatus.textContent = 'The request to get location timed out.';
-                                break;
-                            case error.UNKNOWN_ERROR:
-                                geoStatus.textContent = 'An unknown error occurred.';
-                                break;
-                        }
-                    },
-                    // Options
-                    {
-                        enableHighAccuracy: true,
-                        timeout: 10000,
-                        maximumAge: 0
-                    }
-                );
-            } else {
-                geoStatus.textContent = 'Geolocation is not supported by this browser.';
+      });
+      
+      // Clear Preferences Button
+      document.getElementById('clearPreferences').addEventListener('click', function() {
+        localStorage.clear();
+        sessionStorage.clear();
+        document.getElementById('eventType').value = '';
+        document.getElementById('eventFee').textContent = '';
+        alert('All preferences have been cleared.');
+      });
+      
+      // Geolocation
+      document.getElementById('findNearbyEvents').addEventListener('click', function() {
+        const geoStatus = document.getElementById('geo-status');
+        const geoCoordinates = document.getElementById('geo-coordinates');
+        
+        geoStatus.textContent = 'Locating you...';
+        
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            // Success callback
+            function(position) {
+              const latitude = position.coords.latitude;
+              const longitude = position.coords.longitude;
+              
+              geoStatus.textContent = 'Location found!';
+              geoCoordinates.innerHTML = `Your coordinates: <br>Latitude: ${latitude.toFixed(6)}<br>Longitude: ${longitude.toFixed(6)}<br><br>Searching for events near you...`;
+              
+              // Simulate finding nearby events
+              setTimeout(() => {
+                geoCoordinates.innerHTML += '<br><br>Found 3 events within 5 miles of your location.';
+              }, 2000);
+            },
+            // Error callback
+            function(error) {
+              switch(error.code) {
+                case error.PERMISSION_DENIED:
+                  geoStatus.textContent = 'Location access was denied by the user.';
+                  break;
+                case error.POSITION_UNAVAILABLE:
+                  geoStatus.textContent = 'Location information is unavailable.';
+                  break;
+                case error.TIMEOUT:
+                  geoStatus.textContent = 'The request to get location timed out.';
+                  break;
+                case error.UNKNOWN_ERROR:
+                  geoStatus.textContent = 'An unknown error occurred.';
+                  break;
+              }
+            },
+            // Options
+            {
+              enableHighAccuracy: true,
+              timeout: 10000,
+              maximumAge: 0
             }
-        });
-
-        // Warn user if they try to leave with unfinished form
-        window.addEventListener('beforeunload', function (e) {
-            // Check if any form has data
-            const forms = document.querySelectorAll('form');
-            let formHasData = false;
-
-            forms.forEach(form => {
-                const elements = form.elements;
-                for (let i = 0; i < elements.length; i++) {
-                    if (elements[i].type !== 'submit' && elements[i].type !== 'button' && elements[i].value) {
-                        formHasData = true;
-                        break;
-                    }
-                }
-            });
-
-            if (formHasData) {
-                // Standard for most browsers
-                const confirmationMessage = 'You have unsaved changes. Are you sure you want to leave?';
-                e.returnValue = confirmationMessage;
-                return confirmationMessage;
+          );
+        } else {
+          geoStatus.textContent = 'Geolocation is not supported by this browser.';
+        }
+      });
+      
+      // Warn user if they try to leave with unfinished form
+      window.addEventListener('beforeunload', function(e) {
+        // Check if any form has data
+        const forms = document.querySelectorAll('form');
+        let formHasData = false;
+        
+        forms.forEach(form => {
+          const elements = form.elements;
+          for (let i = 0; i < elements.length; i++) {
+            if (elements[i].type !== 'submit' && elements[i].type !== 'button' && elements[i].value) {
+              formHasData = true;
+              break;
             }
+          }
         });
+        
+        if (formHasData) {
+          // Standard for most browsers
+          const confirmationMessage = 'You have unsaved changes. Are you sure you want to leave?';
+          e.returnValue = confirmationMessage;
+          return confirmationMessage;
+        }
+      });
     </script>
-
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
-</body>
-
+  </body>
 </html>
